@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ed">
+  <title>Orbit Academy — Space Explorer Quiz</title>
+  <style>
+    :root { color-scheme: light; --ink: #20283e; --muted: #5c6476; --purple: #6740cf; --line: #dedee8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f5f3ed; color: var(--ink); font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif; line-height: 1.5; }
+    button { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, [tabindex="-1"]:focus-visible { outline: 3px solid #4931ad; outline-offset: 5px; }
+    [hidden] { display: none !important; }
+    .skip { position: absolute; top: -100px; left: 20px; z-index: 3; background: white; padding: 12px; color: var(--ink); }
+    .skip:focus { top: 12px; }
+    .shell { max-width: 1200px; margin: auto; padding: 0 42px; }
+    header { min-height: 110px; display: flex; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 1px solid #dddedb; }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: 800; letter-spacing: -.7px; }
+    .brand svg { width: 38px; height: 38px; }
+    .brand span span { color: var(--purple); }
+    .header-note { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; }
+    main { padding: 39px 0 28px; }
+    .intro { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 28px; }
+    .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin: 0 0 9px; }
+    h1 { margin: 0; font-size: clamp(30px, 4vw, 43px); letter-spacing: -1.8px; line-height: 1.15; }
+    .intro p:last-child { color: var(--muted); margin: 10px 0 0; font-size: 14px; }
+    .badge { flex-shrink: 0; display: flex; align-items: center; gap: 8px; border: 1px solid #d6d5df; border-radius: 30px; padding: 8px 14px; font-size: 11px; font-weight: 700; }
+    .badge i { width: 7px; height: 7px; border-radius: 50%; background: #307c60; }
+    .layout { display: grid; grid-template-columns: 310px 1fr; gap: 22px; align-items: stretch; }
+    .mission { position: relative; overflow: hidden; border-radius: 22px; background: #23253f; color: #fff; padding: 28px; display: flex; flex-direction: column; min-height: 540px; }
+    .mission-label { color: #c1b6ff; font-size: 10px; font-weight: 700; letter-spacing: 2px; }
+    .mission h2 { margin: 12px 0 0; font-size: 27px; letter-spacing: -.8px; line-height: 1.2; font-weight: 650; }
+    .space-art { width: calc(100% + 40px); margin: 7px -20px -8px; flex-grow: 1; min-height: 240px; }
+    .mission-bottom { border-top: 1px solid #44445e; padding-top: 19px; }
+    .mission-bottom p { font-size: 12px; color: #c7c9dc; margin: 0; }
+    .mission-bottom strong { display: block; color: #f4f3ff; font-size: 13px; margin-bottom: 6px; font-weight: 600; }
+    .quiz-card { background: white; border: 1px solid #e4e3e9; border-radius: 22px; padding: 28px 32px; box-shadow: 0 8px 30px #28234604; }
+    .status-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 12px; font-weight: 700; }
+    .question-count { color: var(--muted); }
+    .score { color: #423475; background: #f0ebfc; padding: 6px 12px; border-radius: 8px; white-space: nowrap; }
+    .score span:first-child { margin-right: 5px; }
+    progress { display: block; width: 100%; height: 7px; border: 0; border-radius: 8px; overflow: hidden; margin: 16px 0 27px; background: #eeeef4; }
+    progress::-webkit-progress-bar { background: #eeeef4; border-radius: 8px; }
+    progress::-webkit-progress-value { background: #9070e7; border-radius: 8px; transition: width .4s ease; }
+    progress::-moz-progress-bar { background: #9070e7; border-radius: 8px; }
+    .category { display: inline-flex; gap: 7px; align-items: center; background: #e8f4ef; color: #29634c; border-radius: 5px; padding: 4px 9px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    #question-title { font-size: clamp(23px, 2.7vw, 29px); line-height: 1.3; letter-spacing: -.7px; margin: 15px 0 8px; }
+    .hint { margin: 0 0 20px; font-size: 12px; color: var(--muted); }
+    .answers { display: grid; gap: 10px; }
+    .answer { width: 100%; border: 1px solid var(--line); background: white; border-radius: 11px; padding: 13px 15px; display: flex; align-items: center; text-align: left; gap: 13px; min-height: 56px; color: var(--ink); cursor: pointer; transition: background-color .3s ease, border-color .3s ease, color .3s ease, box-shadow .15s ease, transform .15s ease; }
+    .answer:hover:not([aria-disabled="true"]) { border-color: #9c83df; background: #f7f4ff; transform: translateX(3px); }
+    .answer:focus-visible { outline: 3px solid #4931ad; outline-offset: 3px; box-shadow: 0 0 0 6px #eee8ff; }
+    .answer:active:not([aria-disabled="true"]) { transform: translateY(1px) scale(.99); box-shadow: inset 0 2px 4px #28234618; }
+    .letter { border: 1px solid #e4e3ec; background: #f8f8fb; border-radius: 6px; width: 28px; height: 28px; display: grid; place-items: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .answer-text { flex: 1; font-size: 13px; font-weight: 600; }
+    .answer-mark { font-weight: 800; font-size: 12px; text-align: right; }
+    .answer.correct { border-color: #41896a; background: #eaf6ef; color: #205239; animation: celebrate .35s ease; }
+    .answer.incorrect { border-color: #bd4d65; background: #fff0f2; color: #8d2b42; animation: shake .3s ease; }
+    .answer[aria-disabled="true"] { cursor: default; }
+    .feedback { font-size: 12px; line-height: 1.6; min-height: 0; margin-top: 16px; }
+    .feedback:empty { display: none; }
+    .feedback strong { display: block; font-size: 13px; margin-bottom: 2px; }
+    .feedback.good { color: #205239; }
+    .feedback.bad { color: #8d2b42; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #eeedf3; }
+    .footer-note { font-size: 11px; color: var(--muted); margin: 0; }
+    .primary { border: 0; border-radius: 9px; background: var(--purple); color: white; padding: 11px 17px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .2s, transform .2s; }
+    .primary:hover { background: #5030a8; transform: translateY(-1px); }
+    .primary:disabled { background: #eeebf6; color: #706783; cursor: not-allowed; transform: none; }
+    .primary span { margin-left: 13px; }
+    .results { text-align: center; padding: 30px 0 10px; }
+    .result-icon { font-size: 45px; display: block; margin: 0 0 10px; }
+    .results h2 { font-size: 32px; letter-spacing: -1px; margin: 10px 0; }
+    .results p { color: var(--muted); font-size: 14px; max-width: 380px; margin: 10px auto 23px; }
+    .result-score { font-size: 58px; font-weight: 800; color: var(--purple); letter-spacing: -3px; margin: 20px 0; }
+    .result-score small { font-size: 24px; color: #77718d; letter-spacing: -1px; }
+    .result-stats { display: flex; justify-content: center; gap: 35px; margin-bottom: 28px; font-size: 12px; color: var(--muted); }
+    .result-stats strong { display: block; color: var(--ink); font-size: 20px; }
+    footer { display: flex; justify-content: space-between; gap: 15px; padding: 24px 0 0; font-size: 10px; color: #6a6d7a; }
+    footer span:last-child { letter-spacing: 1.3px; text-transform: uppercase; }
+    @keyframes celebrate { 50% { transform: scale(1.015); } }
+    @keyframes shake { 25%, 75% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+    @media (min-width: 1000px) { .shell { padding-top: 7px; } }
+    @media (max-width: 800px) { .shell { padding: 0 24px; } .layout { grid-template-columns: 235px 1fr; gap: 16px; } .mission { padding: 22px; } .quiz-card { padding: 24px; } .header-note { font-size: 10px; } }
+    @media (max-width: 640px) { header { min-height: 80px; } .shell { padding: 0 18px; } main { padding-top: 27px; } .header-note { display: none; } .intro { margin-bottom: 22px; } .badge { display: none; } .layout { grid-template-columns: 1fr; } .mission { min-height: 0; padding: 21px 23px; } .mission h2 { font-size: 24px; max-width: 220px; margin-top: 8px; } .mission-bottom { display: none; } .space-art { position: absolute; width: 135px; height: 135px; min-height: 0; right: 0; top: 3px; opacity: .7; margin: 0; } .quiz-card { padding: 24px 20px; } footer { padding-bottom: 22px; } footer span:last-child { display: none; } .answer-mark { max-width: 92px; font-size: 10px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#quiz">Skip to quiz</a>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="#b9a2f1"/><ellipse cx="20" cy="20" rx="19" ry="7" transform="rotate(-35 20 20)" stroke="#6740cf" stroke-width="2.5"/><path d="m31 3 1.1 3.2L35 7.3l-2.9 1.1L31 12l-1.1-3.6L27 7.3l2.9-1.1Z" fill="#6740cf"/></svg>
+        <span>orbit<span>academy</span></span>
+      </div>
+      <span class="header-note">Little questions. Infinite discoveries.</span>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <p class="eyebrow">The curiosity collection / No. 001</p>
+          <h1>Your next great discovery.</h1>
+          <p>Ten questions. One universe. How far will your curiosity take you?</p>
+        </div>
+        <span class="badge"><i aria-hidden="true"></i> ALL EXPLORERS WELCOME</span>
+      </div>
+      <div class="layout">
+        <aside class="mission" aria-label="Your mission">
+          <span class="mission-label">✦ &nbsp; SPACE EXPLORATION</span>
+          <h2>Big universe.<br>Brilliant you.</h2>
+          <svg class="space-art" viewBox="0 0 300 290" fill="none" aria-hidden="true">
+            <circle cx="151" cy="150" r="116" stroke="#ffffff" stroke-opacity=".09" stroke-dasharray="3 7"/>
+            <circle cx="151" cy="150" r="91" stroke="#ffffff" stroke-opacity=".07"/>
+            <circle cx="153" cy="145" r="61" fill="#b9a2ef"/>
+            <path d="M99 118c24 17 51-16 87-13M93 143c38 26 70-18 119-5M101 172c42 22 71-9 101-3" stroke="#9a7cd6" stroke-width="13" stroke-linecap="round"/>
+            <path d="M94 133c-34 25-42 45-31 53 17 13 74-1 127-33 53-32 84-68 67-80-9-7-28-5-51 2" stroke="#f8c685" stroke-width="13"/>
+            <path d="M95 133c-34 25-42 45-31 53" stroke="#ffdda9" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="61" cy="65" r="14" fill="#b8dbce"/><circle cx="57" cy="61" r="4" fill="#91b9aa"/>
+            <circle cx="243" cy="229" r="8" fill="#f3b4a4"/>
+            <path d="m240 37 2 7 7 2-7 2-2 7-2-7-7-2 7-2ZM50 217l2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="#f9d79c"/>
+            <circle cx="113" cy="44" r="2" fill="#f3e8ff"/><circle cx="264" cy="140" r="2" fill="#f3e8ff"/><circle cx="118" cy="247" r="2" fill="#f3e8ff"/><circle cx="33" cy="139" r="2" fill="#f3e8ff"/>
+            <path d="m203 256 6-2m-3-3v6M81 30l6-2m-3-3v6" stroke="#b8a2f1" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="mission-bottom">
+            <strong>A small step for your curiosity.</strong>
+            <p>Explore planets, cosmic wonders, and the people who reached for the stars.</p>
+          </div>
+        </aside>
+        <section class="quiz-card" id="quiz" aria-label="Space exploration quiz">
+          <div class="status-row">
+            <span class="question-count" id="question-count">Question 01 <span aria-hidden="true">/</span><span class="total-label"> 10</span></span>
+            <span class="score"><span aria-hidden="true">✦</span> Score: <span id="score">0</span></span>
+          </div>
+          <label for="progress" hidden>Questions answered</label>
+          <progress id="progress" value="0" max="10" aria-label="Questions answered: 0 of 10">0 of 10</progress>
+          <div id="question-screen">
+            <span class="category" id="category">◌ &nbsp; Our solar system</span>
+            <h2 id="question-title" tabindex="-1"></h2>
+            <p class="hint" id="answer-hint">Pick one answer to continue. Take your time — there’s no timer.</p>
+            <div class="answers" id="answers" role="group" aria-labelledby="question-title" aria-describedby="answer-hint"></div>
+            <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></div>
+            <div class="card-footer">
+              <p class="footer-note" id="footer-note">Let your curiosity lead the way.</p>
+              <button class="primary" id="next" type="button" disabled>Next question <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+          <section class="results" id="results" aria-labelledby="results-title" hidden>
+            <span class="result-icon" aria-hidden="true">✧</span>
+            <span class="category">Mission complete</span>
+            <h2 id="results-title" tabindex="-1">The universe is yours.</h2>
+            <div class="result-score" id="result-score"></div>
+            <p id="result-message"></p>
+            <div class="result-stats">
+              <div><strong id="correct-total"></strong>Correct answers</div>
+              <div><strong id="accuracy"></strong>Accuracy</div>
+            </div>
+            <button type="button" class="primary" id="restart">Explore again <span aria-hidden="true">↻</span></button>
+          </section>
+        </section>
+      </div>
+      <footer><span>Made for curious minds. No sign-ups, just stardust.</span><span>Keep looking up ↗</span></footer>
+    </main>
+  </div>
+  <script>
+    "use strict";
+    const questions = [
+      { category: "Our solar system", question: "Which planet is known as the Red Planet?", answers: ["Venus", "Mars", "Jupiter", "Mercury"], correct: 1, explanation: "Mars gets its rusty red color from iron oxide in its soil — the same compound that makes rust on Earth." },
+      { category: "First footsteps", question: "Who was the first person to walk on the Moon?", answers: ["Yuri Gagarin", "Sally Ride", "Neil Armstrong", "Buzz Aldrin"], correct: 2, explanation: "Neil Armstrong stepped onto the Moon on July 20, 1969, during Apollo 11. Buzz Aldrin followed shortly afterward." },
+      { category: "Planetary giants", question: "Which is the largest planet in our solar system?", answers: ["Saturn", "Earth", "Neptune", "Jupiter"], correct: 3, explanation: "Jupiter is the largest planet. More than 1,300 Earths could fit inside its enormous volume." },
+      { category: "Our closest star", question: "What kind of object is the Sun?", answers: ["A star", "A planet", "A comet", "A moon"], correct: 0, explanation: "The Sun is a star: a huge ball of hot plasma powered by nuclear fusion in its core." },
+      { category: "Life in orbit", question: "Why do astronauts appear to float aboard the International Space Station?", answers: ["There is no gravity near Earth", "They and the station are in continuous free fall", "Their suits repel gravity", "Space has strong upward winds"], correct: 1, explanation: "Earth’s gravity still acts on the station. The station and its crew fall around Earth together, creating the sensation of weightlessness." },
+      { category: "Ringed wonders", question: "Which planet is famous for its bright, extensive rings?", answers: ["Mars", "Venus", "Saturn", "Mercury"], correct: 2, explanation: "Saturn’s spectacular rings are made mostly of pieces of ice, with some rock and dust. Other giant planets have rings too!" },
+      { category: "Cosmic neighborhood", question: "What is the name of the galaxy that contains our solar system?", answers: ["Andromeda", "The Whirlpool Galaxy", "The Sombrero Galaxy", "The Milky Way"], correct: 3, explanation: "Our solar system lies in the Milky Way, a barred spiral galaxy containing billions of stars." },
+      { category: "Robotic explorers", question: "What is a Mars rover designed to do?", answers: ["Explore the surface of Mars", "Carry tourists to the Moon", "Repair satellites around Earth", "Collect fuel from the Sun"], correct: 0, explanation: "Rovers such as Curiosity and Perseverance explore Mars, study rocks and soil, and send their discoveries back to Earth." },
+      { category: "Measuring the cosmos", question: "What does a light-year measure?", answers: ["The age of a star", "The brightness of a galaxy", "Distance", "Time"], correct: 2, explanation: "A light-year is the distance light travels in one year — about 9.46 trillion kilometers, or 5.88 trillion miles." },
+      { category: "A window to the universe", question: "Why do we put telescopes in space?", answers: ["Stars only appear in space", "To observe without Earth’s atmosphere blocking or blurring light", "To make distant galaxies move closer", "There is no sunlight in space"], correct: 1, explanation: "Above Earth’s atmosphere, space telescopes can capture clearer views and detect types of light that our atmosphere absorbs." }
+    ];
+    const byId = id => document.getElementById(id);
+    const answers = byId("answers");
+    const feedback = byId("feedback");
+    const next = byId("next");
+    let questionIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    function updateProgress(completed) {
+      const progress = byId("progress");
+      progress.value = completed;
+      progress.textContent = `${completed} of ${questions.length}`;
+      progress.setAttribute("aria-label", `Questions answered: ${completed} of ${questions.length}`);
+      byId("score").textContent = score;
+    }
+
+    function renderQuestion(moveFocus = false) {
+      answered = false;
+      const current = questions[questionIndex];
+      byId("question-count").textContent = `Question ${String(questionIndex + 1).padStart(2, "0")} / ${questions.length}`;
+      byId("category").textContent = `◌  ${current.category}`;
+      byId("question-title").textContent = current.question;
+      feedback.replaceChildren();
+      feedback.className = "feedback";
+      byId("footer-note").textContent = "Let your curiosity lead the way.";
+      next.disabled = true;
+      next.innerHTML = `${questionIndex === questions.length - 1 ? "See results" : "Next question"} <span aria-hidden="true">→</span>`;
+      answers.replaceChildren();
+      current.answers.forEach((text, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "answer";
+        const letter = document.createElement("span");
+        letter.className = "letter";
+        letter.setAttribute("aria-hidden", "true");
+        letter.textContent = String.fromCharCode(65 + index);
+        const label = document.createElement("span");
+        label.className = "answer-text";
+        label.textContent = text;
+        button.append(letter, label);
+        button.addEventListener("click", () => selectAnswer(index));
+        answers.append(button);
+      });
+      updateProgress(questionIndex);
+      if (moveFocus) byId("question-title").focus();
+    }
+
+    function selectAnswer(selected) {
+      if (answered) return;
+      answered = true;
+      const current = questions[questionIndex];
+      const isCorrect = selected === current.correct;
+      if (isCorrect) score++;
+      Array.from(answers.children).forEach((button, index) => {
+        // Keep the selected button focused while preventing repeat scoring.
+        button.setAttribute("aria-disabled", "true");
+        if (index === current.correct || (index === selected && !isCorrect)) {
+          const correct = index === current.correct;
+          button.classList.add(correct ? "correct" : "incorrect");
+          const mark = document.createElement("span");
+          mark.className = "answer-mark";
+          mark.textContent = correct ? "✓ Correct answer" : "× Your answer";
+          button.append(mark);
+        }
+      });
+      const heading = document.createElement("strong");
+      heading.textContent = isCorrect ? "✓ Stellar work! That’s correct." : `× Not quite. The answer is ${current.answers[current.correct]}.`;
+      feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
+      feedback.append(heading, document.createTextNode(current.explanation));
+      byId("footer-note").textContent = "Discovery unlocked. Ready for the next one?";
+      updateProgress(questionIndex + 1);
+      next.disabled = false;
+    }
+
+    next.addEventListener("click", () => {
+      if (!answered) return;
+      if (questionIndex < questions.length - 1) {
+        questionIndex++;
+        renderQuestion(true);
+      } else {
+        byId("question-screen").hidden = true;
+        byId("results").hidden = false;
+        byId("question-count").textContent = "10 of 10 questions completed";
+        byId("result-score").innerHTML = `${score}<small> / ${questions.length}</small>`;
+        byId("correct-total").textContent = `${score} / ${questions.length}`;
+        byId("accuracy").textContent = `${score * 10}%`;
+        byId("result-message").textContent = score === 10
+          ? "A perfect mission! Your space knowledge is out of this world. Keep that curiosity shining."
+          : score >= 7
+            ? "Fantastic exploring! You know your way around the cosmos — and there’s always more to discover."
+            : "Every great explorer starts with curiosity. You’ve made new discoveries today — take another trip to see what you remember!";
+        byId("results-title").focus();
+      }
+    });
+
+    byId("restart").addEventListener("click", () => {
+      questionIndex = 0;
+      score = 0;
+      byId("results").hidden = true;
+      byId("question-screen").hidden = false;
+      renderQuestion(true);
+    });
+    renderQuestion();
+  </script>
+</body>
+</html>
