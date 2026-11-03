@@ -20,7 +20,11 @@
     .brand { display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: 800; letter-spacing: -.7px; }
     .brand svg { width: 38px; height: 38px; }
     .brand span span { color: var(--purple); }
+    .header-tools { display: flex; align-items: center; gap: 22px; }
     .header-note { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 1.3px; text-transform: uppercase; }
+    .language-switch { display: flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid #d6d5df; border-radius: 9px; background: white; }
+    .language-switch button { border: 0; border-radius: 6px; background: transparent; color: var(--muted); padding: 7px 9px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .language-switch button[aria-pressed="true"] { background: #f0ebfc; color: #423475; }
     main { padding: 39px 0 28px; }
     .intro { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 28px; }
     .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin: 0 0 9px; }
@@ -84,33 +88,40 @@
     @keyframes shake { 25%, 75% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
     @media (min-width: 1000px) { .shell { padding-top: 7px; } }
     @media (max-width: 800px) { .shell { padding: 0 24px; } .layout { grid-template-columns: 235px 1fr; gap: 16px; } .mission { padding: 22px; } .quiz-card { padding: 24px; } .header-note { font-size: 10px; } }
-    @media (max-width: 640px) { header { min-height: 80px; } .shell { padding: 0 18px; } main { padding-top: 27px; } .header-note { display: none; } .intro { margin-bottom: 22px; } .badge { display: none; } .layout { grid-template-columns: 1fr; } .mission { min-height: 0; padding: 21px 23px; } .mission h2 { font-size: 24px; max-width: 220px; margin-top: 8px; } .mission-bottom { display: none; } .space-art { position: absolute; width: 135px; height: 135px; min-height: 0; right: 0; top: 3px; opacity: .7; margin: 0; } .quiz-card { padding: 24px 20px; } footer { padding-bottom: 22px; } footer span:last-child { display: none; } .answer-mark { max-width: 92px; font-size: 10px; } }
+    @media (max-width: 640px) { header { min-height: 80px; } .shell { padding: 0 18px; } main { padding-top: 27px; } .header-tools { gap: 0; } .header-note { display: none; } .language-switch button { padding: 7px 8px; } .intro { margin-bottom: 22px; } .badge { display: none; } .layout { grid-template-columns: 1fr; } .mission { min-height: 0; padding: 21px 23px; } .mission h2 { font-size: 24px; max-width: 220px; margin-top: 8px; } .mission-bottom { display: none; } .space-art { position: absolute; width: 135px; height: 135px; min-height: 0; right: 0; top: 3px; opacity: .7; margin: 0; } .quiz-card { padding: 24px 20px; } footer { padding-bottom: 22px; } footer span:last-child { display: none; } .answer-mark { max-width: 92px; font-size: 10px; } }
+    @media (max-width: 370px) { .shell { padding: 0 12px; } .brand { gap: 7px; font-size: 16px; } .brand svg { width: 32px; height: 32px; } .language-switch button { padding: 7px 6px; font-size: 10px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
-  <a class="skip" href="#quiz">Skip to quiz</a>
+  <a class="skip" id="skip-link" href="#quiz">Skip to quiz</a>
   <div class="shell">
     <header>
       <div class="brand">
         <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="#b9a2f1"/><ellipse cx="20" cy="20" rx="19" ry="7" transform="rotate(-35 20 20)" stroke="#6740cf" stroke-width="2.5"/><path d="m31 3 1.1 3.2L35 7.3l-2.9 1.1L31 12l-1.1-3.6L27 7.3l2.9-1.1Z" fill="#6740cf"/></svg>
         <span>orbit<span>academy</span></span>
       </div>
-      <span class="header-note">Little questions. Infinite discoveries.</span>
+      <div class="header-tools">
+        <span class="header-note" id="header-note">Little questions. Infinite discoveries.</span>
+        <div class="language-switch" id="language-switch" role="group" aria-label="Language">
+          <button type="button" data-language="en" aria-pressed="true">English</button>
+          <button type="button" data-language="ko" aria-pressed="false">한국어</button>
+        </div>
+      </div>
     </header>
     <main>
       <div class="intro">
         <div>
-          <p class="eyebrow">The curiosity collection / No. 001</p>
-          <h1>Your next great discovery.</h1>
-          <p>Ten questions. One universe. How far will your curiosity take you?</p>
+          <p class="eyebrow" id="eyebrow">The curiosity collection / No. 001</p>
+          <h1 id="intro-title">Your next great discovery.</h1>
+          <p id="intro-description">Ten questions. One universe. How far will your curiosity take you?</p>
         </div>
-        <span class="badge"><i aria-hidden="true"></i> ALL EXPLORERS WELCOME</span>
+        <span class="badge"><i aria-hidden="true"></i> <span id="badge-label">ALL EXPLORERS WELCOME</span></span>
       </div>
       <div class="layout">
-        <aside class="mission" aria-label="Your mission">
-          <span class="mission-label">✦ &nbsp; SPACE EXPLORATION</span>
-          <h2>Big universe.<br>Brilliant you.</h2>
+        <aside class="mission" id="mission" aria-label="Your mission">
+          <span class="mission-label" id="mission-label">✦ &nbsp; SPACE EXPLORATION</span>
+          <h2 id="mission-title">Big universe.<br>Brilliant you.</h2>
           <svg class="space-art" viewBox="0 0 300 290" fill="none" aria-hidden="true">
             <circle cx="151" cy="150" r="116" stroke="#ffffff" stroke-opacity=".09" stroke-dasharray="3 7"/>
             <circle cx="151" cy="150" r="91" stroke="#ffffff" stroke-opacity=".07"/>
@@ -125,16 +136,16 @@
             <path d="m203 256 6-2m-3-3v6M81 30l6-2m-3-3v6" stroke="#b8a2f1" stroke-width="2" stroke-linecap="round"/>
           </svg>
           <div class="mission-bottom">
-            <strong>A small step for your curiosity.</strong>
-            <p>Explore planets, cosmic wonders, and the people who reached for the stars.</p>
+            <strong id="mission-bottom-title">A small step for your curiosity.</strong>
+            <p id="mission-bottom-copy">Explore planets, cosmic wonders, and the people who reached for the stars.</p>
           </div>
         </aside>
         <section class="quiz-card" id="quiz" aria-label="Space exploration quiz">
           <div class="status-row">
-            <span class="question-count" id="question-count">Question 01 <span aria-hidden="true">/</span><span class="total-label"> 10</span></span>
-            <span class="score"><span aria-hidden="true">✦</span> Score: <span id="score">0</span></span>
+            <span class="question-count" id="question-count"></span>
+            <span class="score"><span aria-hidden="true">✦</span> <span id="score-label">Score:</span> <span id="score">0</span></span>
           </div>
-          <label for="progress" hidden>Questions answered</label>
+          <label for="progress" id="progress-label" hidden>Questions answered</label>
           <progress id="progress" value="0" max="10" aria-label="Questions answered: 0 of 10">0 of 10</progress>
           <div id="question-screen">
             <span class="category" id="category">◌ &nbsp; Our solar system</span>
@@ -144,24 +155,24 @@
             <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></div>
             <div class="card-footer">
               <p class="footer-note" id="footer-note">Let your curiosity lead the way.</p>
-              <button class="primary" id="next" type="button" disabled>Next question <span aria-hidden="true">→</span></button>
+              <button class="primary" id="next" type="button" disabled></button>
             </div>
           </div>
           <section class="results" id="results" aria-labelledby="results-title" hidden>
             <span class="result-icon" aria-hidden="true">✧</span>
-            <span class="category">Mission complete</span>
+            <span class="category" id="results-category">Mission complete</span>
             <h2 id="results-title" tabindex="-1">The universe is yours.</h2>
             <div class="result-score" id="result-score"></div>
             <p id="result-message"></p>
             <div class="result-stats">
-              <div><strong id="correct-total"></strong>Correct answers</div>
-              <div><strong id="accuracy"></strong>Accuracy</div>
+              <div><strong id="correct-total"></strong><span id="correct-label">Correct answers</span></div>
+              <div><strong id="accuracy"></strong><span id="accuracy-label">Accuracy</span></div>
             </div>
-            <button type="button" class="primary" id="restart">Explore again <span aria-hidden="true">↻</span></button>
+            <button type="button" class="primary" id="restart"></button>
           </section>
         </section>
       </div>
-      <footer><span>Made for curious minds. No sign-ups, just stardust.</span><span>Keep looking up ↗</span></footer>
+      <footer><span id="footer-copy">Made for curious minds. No sign-ups, just stardust.</span><span id="footer-tagline">Keep looking up ↗</span></footer>
     </main>
   </div>
   <script>
@@ -178,35 +189,101 @@
       { category: "Measuring the cosmos", question: "What does a light-year measure?", answers: ["The age of a star", "The brightness of a galaxy", "Distance", "Time"], correct: 2, explanation: "A light-year is the distance light travels in one year — about 9.46 trillion kilometers, or 5.88 trillion miles." },
       { category: "A window to the universe", question: "Why do we put telescopes in space?", answers: ["Stars only appear in space", "To observe without Earth’s atmosphere blocking or blurring light", "To make distant galaxies move closer", "There is no sunlight in space"], correct: 1, explanation: "Above Earth’s atmosphere, space telescopes can capture clearer views and detect types of light that our atmosphere absorbs." }
     ];
+    const koreanQuestions = [
+      { category: "태양계", question: "붉은 행성으로 알려진 행성은 무엇인가요?", answers: ["금성", "화성", "목성", "수성"], explanation: "화성의 토양에는 지구의 녹과 같은 산화철이 있어 붉은빛을 띱니다." },
+      { category: "최초의 발자국", question: "달을 처음 걸은 사람은 누구인가요?", answers: ["유리 가가린", "샐리 라이드", "닐 암스트롱", "버즈 올드린"], explanation: "닐 암스트롱은 1969년 7월 20일 아폴로 11호 임무 중 달에 발을 디뎠고, 버즈 올드린이 곧 뒤를 따랐습니다." },
+      { category: "행성 거인", question: "태양계에서 가장 큰 행성은 무엇인가요?", answers: ["토성", "지구", "해왕성", "목성"], explanation: "목성은 태양계에서 가장 큰 행성입니다. 목성의 거대한 부피에는 지구가 1,300개 넘게 들어갈 수 있습니다." },
+      { category: "가장 가까운 별", question: "태양은 어떤 천체인가요?", answers: ["별", "행성", "혜성", "위성"], explanation: "태양은 중심부의 핵융합으로 에너지를 만드는 거대한 고온 플라스마 덩어리인 별입니다." },
+      { category: "궤도에서의 삶", question: "우주비행사들이 국제우주정거장에서 떠다니는 것처럼 보이는 이유는 무엇인가요?", answers: ["지구 근처에는 중력이 없어서", "우주비행사와 우주정거장이 함께 계속 자유 낙하 중이어서", "우주복이 중력을 밀어내서", "우주에 강한 상승 기류가 있어서"], explanation: "우주정거장에도 지구의 중력이 작용합니다. 우주정거장과 대원들이 함께 지구 주위를 자유 낙하하기 때문에 무중력처럼 느껴집니다." },
+      { category: "고리의 신비", question: "밝고 넓은 고리로 유명한 행성은 무엇인가요?", answers: ["화성", "금성", "토성", "수성"], explanation: "토성의 아름다운 고리는 대부분 얼음 조각으로 이루어져 있으며 암석과 먼지도 섞여 있습니다. 다른 거대 행성에도 고리가 있습니다!" },
+      { category: "우주의 이웃", question: "우리 태양계가 속한 은하의 이름은 무엇인가요?", answers: ["안드로메다 은하", "소용돌이 은하", "솜브레로 은하", "우리은하"], explanation: "우리 태양계는 수십억 개의 별을 품은 막대나선은하인 우리은하에 있습니다." },
+      { category: "로봇 탐험가", question: "화성 탐사 로버는 무엇을 하도록 설계되었나요?", answers: ["화성 표면 탐사", "관광객을 달로 수송", "지구 주위의 인공위성 수리", "태양에서 연료 수집"], explanation: "큐리오시티와 퍼서비어런스 같은 로버는 화성을 탐사하고 암석과 토양을 연구하며 발견한 내용을 지구로 전송합니다." },
+      { category: "우주의 거리 재기", question: "광년은 무엇을 측정하는 단위인가요?", answers: ["별의 나이", "은하의 밝기", "거리", "시간"], explanation: "광년은 빛이 1년 동안 이동하는 거리입니다. 약 9조 4,600억 킬로미터에 해당합니다." },
+      { category: "우주를 향한 창", question: "우주에 망원경을 설치하는 이유는 무엇인가요?", answers: ["별은 우주에서만 보여서", "지구 대기가 빛을 가리거나 흐리게 하지 않는 곳에서 관측하려고", "먼 은하를 가까이 이동시키려고", "우주에는 햇빛이 없어서"], explanation: "지구 대기 위에 있는 우주 망원경은 더 선명한 모습을 포착하고 대기가 흡수하는 종류의 빛도 감지할 수 있습니다." }
+    ];
+    const text = {
+      en: {
+        title: "Orbit Academy — Space Explorer Quiz", skip: "Skip to quiz", header: "Little questions. Infinite discoveries.",
+        eyebrow: "The curiosity collection / No. 001", introTitle: "Your next great discovery.",
+        introDescription: "Ten questions. One universe. How far will your curiosity take you?", badge: "ALL EXPLORERS WELCOME",
+        mission: "Your mission", missionLabel: "✦　 SPACE EXPLORATION", missionTitle: "Big universe.<br>Brilliant you.",
+        missionBottomTitle: "A small step for your curiosity.", missionBottomCopy: "Explore planets, cosmic wonders, and the people who reached for the stars.",
+        quiz: "Space exploration quiz", progressLabel: "Questions answered", progress: (n, total) => `Questions answered: ${n} of ${total}`,
+        count: (n, total) => `Question ${String(n).padStart(2, "0")} / ${total}`, score: "Score:", category: "Our solar system",
+        hint: "Pick one answer to continue. Take your time — there’s no timer.", footerReady: "Let your curiosity lead the way.",
+        footerAnswered: "Discovery unlocked. Ready for the next one?", next: "Next question", seeResults: "See results",
+        correctMark: "✓ Correct answer", selectedMark: "× Your answer", correctFeedback: "✓ Stellar work! That’s correct.",
+        incorrectFeedback: answer => `× Not quite. The answer is ${answer}.`,
+        resultsCategory: "Mission complete", resultsTitle: "The universe is yours.", perfect: "A perfect mission! Your space knowledge is out of this world. Keep that curiosity shining.",
+        good: "Fantastic exploring! You know your way around the cosmos — and there’s always more to discover.",
+        retry: "Every great explorer starts with curiosity. You’ve made new discoveries today — take another trip to see what you remember!",
+        correct: "Correct answers", accuracy: "Accuracy", restart: "Explore again", completed: "10 of 10 questions completed",
+        footer: "Made for curious minds. No sign-ups, just stardust.", tagline: "Keep looking up ↗", language: "Language"
+      },
+      ko: {
+        title: "오빗 아카데미 — 우주 탐험 퀴즈", skip: "퀴즈로 건너뛰기", header: "작은 질문, 무한한 발견.",
+        eyebrow: "호기심 컬렉션 / 001", introTitle: "다음 위대한 발견을 향해.",
+        introDescription: "열 가지 질문, 하나의 우주. 호기심은 어디까지 데려갈까요?", badge: "모든 탐험가를 환영합니다",
+        mission: "탐험 임무", missionLabel: "✦　 우주 탐험", missionTitle: "드넓은 우주.<br>빛나는 당신.",
+        missionBottomTitle: "호기심을 향한 작은 한 걸음.", missionBottomCopy: "행성과 놀라운 우주, 별을 향해 나아간 사람들을 만나 보세요.",
+        quiz: "우주 탐험 퀴즈", progressLabel: "답변한 문제", progress: (n, total) => `답변한 문제: ${n} / ${total}`,
+        count: (n, total) => `문제 ${String(n).padStart(2, "0")} / ${total}`, score: "점수:", category: "태양계",
+        hint: "답을 하나 선택하면 다음으로 넘어갑니다. 시간제한은 없으니 천천히 생각해 보세요.", footerReady: "호기심을 따라가 보세요.",
+        footerAnswered: "새로운 발견을 했어요. 다음 문제로 갈까요?", next: "다음 문제", seeResults: "결과 보기",
+        correctMark: "✓ 정답", selectedMark: "× 내가 고른 답", correctFeedback: "✓ 멋져요! 정답입니다.",
+        incorrectFeedback: answer => `× 아쉽지만 정답은 ${answer}입니다.`,
+        resultsCategory: "임무 완료", resultsTitle: "우주는 당신의 것입니다.", perfect: "완벽한 임무예요! 우주 지식이 정말 대단하네요. 반짝이는 호기심을 계속 이어 가세요.",
+        good: "멋진 탐험이었어요! 우주를 잘 알고 있네요. 발견할 것은 언제나 더 많답니다.",
+        retry: "위대한 탐험도 호기심에서 시작됩니다. 오늘 새로운 것을 발견했어요. 다시 도전하며 기억나는 내용을 확인해 보세요!",
+        correct: "정답", accuracy: "정답률", restart: "다시 탐험하기", completed: "문제 10개 모두 완료",
+        footer: "호기심 많은 마음을 위해 만들었어요. 가입 없이, 별빛만 가득.", tagline: "계속 하늘을 바라봐요 ↗", language: "언어"
+      }
+    };
     const byId = id => document.getElementById(id);
     const answers = byId("answers");
     const feedback = byId("feedback");
     const next = byId("next");
     let questionIndex = 0;
     let score = 0;
-    let answered = false;
+    let language = "en";
+    const selectedAnswers = Array(questions.length).fill(null);
 
     function updateProgress(completed) {
       const progress = byId("progress");
       progress.value = completed;
-      progress.textContent = `${completed} of ${questions.length}`;
-      progress.setAttribute("aria-label", `Questions answered: ${completed} of ${questions.length}`);
+      progress.textContent = language === "ko" ? `${completed} / ${questions.length}` : `${completed} of ${questions.length}`;
+      progress.setAttribute("aria-label", text[language].progress(completed, questions.length));
       byId("score").textContent = score;
     }
 
+    function renderFeedback(current, selected) {
+      const isCorrect = selected === current.correct;
+      feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
+      const heading = document.createElement("strong");
+      heading.textContent = isCorrect
+        ? text[language].correctFeedback
+        : text[language].incorrectFeedback(current.answers[current.correct]);
+      feedback.replaceChildren(heading, document.createTextNode(current.explanation));
+    }
+
     function renderQuestion(moveFocus = false) {
-      answered = false;
-      const current = questions[questionIndex];
-      byId("question-count").textContent = `Question ${String(questionIndex + 1).padStart(2, "0")} / ${questions.length}`;
+      const current = {
+        ...(language === "ko" ? koreanQuestions[questionIndex] : questions[questionIndex]),
+        correct: questions[questionIndex].correct
+      };
+      const answered = selectedAnswers[questionIndex] !== null;
+      const selected = selectedAnswers[questionIndex];
+      const keepAnswerFocus = answers.contains(document.activeElement);
+      byId("question-count").textContent = text[language].count(questionIndex + 1, questions.length);
       byId("category").textContent = `◌  ${current.category}`;
       byId("question-title").textContent = current.question;
       feedback.replaceChildren();
       feedback.className = "feedback";
-      byId("footer-note").textContent = "Let your curiosity lead the way.";
-      next.disabled = true;
-      next.innerHTML = `${questionIndex === questions.length - 1 ? "See results" : "Next question"} <span aria-hidden="true">→</span>`;
+      byId("footer-note").textContent = answered ? text[language].footerAnswered : text[language].footerReady;
+      next.disabled = !answered;
+      next.innerHTML = `${questionIndex === questions.length - 1 ? text[language].seeResults : text[language].next} <span aria-hidden="true">→</span>`;
       answers.replaceChildren();
-      current.answers.forEach((text, index) => {
+      current.answers.forEach((answerText, index) => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "answer";
@@ -216,59 +293,90 @@
         letter.textContent = String.fromCharCode(65 + index);
         const label = document.createElement("span");
         label.className = "answer-text";
-        label.textContent = text;
+        label.textContent = answerText;
         button.append(letter, label);
+        if (answered) {
+          button.setAttribute("aria-disabled", "true");
+          if (index === current.correct || index === selected) {
+            const correct = index === current.correct;
+            button.classList.add(correct ? "correct" : "incorrect");
+            const mark = document.createElement("span");
+            mark.className = "answer-mark";
+            mark.textContent = correct ? text[language].correctMark : text[language].selectedMark;
+            button.append(mark);
+          }
+        }
         button.addEventListener("click", () => selectAnswer(index));
         answers.append(button);
       });
-      updateProgress(questionIndex);
+      if (answered) renderFeedback(current, selected);
+      updateProgress(questionIndex + Number(answered));
+      if (keepAnswerFocus && answered) answers.children[selected].focus();
       if (moveFocus) byId("question-title").focus();
     }
 
-    function selectAnswer(selected) {
-      if (answered) return;
-      answered = true;
-      const current = questions[questionIndex];
-      const isCorrect = selected === current.correct;
-      if (isCorrect) score++;
-      Array.from(answers.children).forEach((button, index) => {
-        // Keep the selected button focused while preventing repeat scoring.
-        button.setAttribute("aria-disabled", "true");
-        if (index === current.correct || (index === selected && !isCorrect)) {
-          const correct = index === current.correct;
-          button.classList.add(correct ? "correct" : "incorrect");
-          const mark = document.createElement("span");
-          mark.className = "answer-mark";
-          mark.textContent = correct ? "✓ Correct answer" : "× Your answer";
-          button.append(mark);
-        }
+    function renderResults() {
+      const labels = text[language];
+      byId("question-count").textContent = labels.completed;
+      byId("result-score").innerHTML = `${score}<small> / ${questions.length}</small>`;
+      byId("correct-total").textContent = `${score} / ${questions.length}`;
+      byId("accuracy").textContent = `${score * 10}%`;
+      byId("result-message").textContent = score === 10 ? labels.perfect : score >= 7 ? labels.good : labels.retry;
+      updateProgress(questions.length);
+    }
+
+    function applyLanguage(nextLanguage) {
+      language = nextLanguage;
+      const labels = text[language];
+      document.documentElement.lang = language;
+      document.title = labels.title;
+      byId("skip-link").textContent = labels.skip;
+      byId("header-note").textContent = labels.header;
+      byId("language-switch").setAttribute("aria-label", labels.language);
+      document.querySelectorAll("[data-language]").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.language === language));
       });
-      const heading = document.createElement("strong");
-      heading.textContent = isCorrect ? "✓ Stellar work! That’s correct." : `× Not quite. The answer is ${current.answers[current.correct]}.`;
-      feedback.className = `feedback ${isCorrect ? "good" : "bad"}`;
-      feedback.append(heading, document.createTextNode(current.explanation));
-      byId("footer-note").textContent = "Discovery unlocked. Ready for the next one?";
-      updateProgress(questionIndex + 1);
-      next.disabled = false;
+      byId("eyebrow").textContent = labels.eyebrow;
+      byId("intro-title").textContent = labels.introTitle;
+      byId("intro-description").textContent = labels.introDescription;
+      byId("badge-label").textContent = labels.badge;
+      byId("mission").setAttribute("aria-label", labels.mission);
+      byId("mission-label").textContent = labels.missionLabel;
+      byId("mission-title").innerHTML = labels.missionTitle;
+      byId("mission-bottom-title").textContent = labels.missionBottomTitle;
+      byId("mission-bottom-copy").textContent = labels.missionBottomCopy;
+      byId("quiz").setAttribute("aria-label", labels.quiz);
+      byId("progress-label").textContent = labels.progressLabel;
+      byId("score-label").textContent = labels.score;
+      byId("answer-hint").textContent = labels.hint;
+      byId("results-category").textContent = labels.resultsCategory;
+      byId("results-title").textContent = labels.resultsTitle;
+      byId("correct-label").textContent = labels.correct;
+      byId("accuracy-label").textContent = labels.accuracy;
+      byId("restart").innerHTML = `${labels.restart} <span aria-hidden="true">↻</span>`;
+      byId("footer-copy").textContent = labels.footer;
+      byId("footer-tagline").textContent = labels.tagline;
+      if (byId("results").hidden) renderQuestion();
+      else renderResults();
+    }
+
+    function selectAnswer(selected) {
+      if (selectedAnswers[questionIndex] !== null) return;
+      selectedAnswers[questionIndex] = selected;
+      const current = questions[questionIndex];
+      if (selected === current.correct) score++;
+      renderQuestion();
     }
 
     next.addEventListener("click", () => {
-      if (!answered) return;
+      if (selectedAnswers[questionIndex] === null) return;
       if (questionIndex < questions.length - 1) {
         questionIndex++;
         renderQuestion(true);
       } else {
         byId("question-screen").hidden = true;
         byId("results").hidden = false;
-        byId("question-count").textContent = "10 of 10 questions completed";
-        byId("result-score").innerHTML = `${score}<small> / ${questions.length}</small>`;
-        byId("correct-total").textContent = `${score} / ${questions.length}`;
-        byId("accuracy").textContent = `${score * 10}%`;
-        byId("result-message").textContent = score === 10
-          ? "A perfect mission! Your space knowledge is out of this world. Keep that curiosity shining."
-          : score >= 7
-            ? "Fantastic exploring! You know your way around the cosmos — and there’s always more to discover."
-            : "Every great explorer starts with curiosity. You’ve made new discoveries today — take another trip to see what you remember!";
+        renderResults();
         byId("results-title").focus();
       }
     });
@@ -276,9 +384,13 @@
     byId("restart").addEventListener("click", () => {
       questionIndex = 0;
       score = 0;
+      selectedAnswers.fill(null);
       byId("results").hidden = true;
       byId("question-screen").hidden = false;
       renderQuestion(true);
+    });
+    document.querySelectorAll("[data-language]").forEach(button => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.language));
     });
     renderQuestion();
   </script>
